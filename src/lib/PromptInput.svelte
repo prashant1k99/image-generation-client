@@ -1,25 +1,25 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte';
+  const dispatch = createEventDispatcher();
+
 	import UpArrow from "../assets/icon/UpArrow.svelte"
 
-  export let placeholder = 'Enter Image Generation Prompt'
-  export let isProcessing:boolean = false
+  export let placeholder: string
+  export let isProcessing:boolean
 
-  let prompt: string = ''
+  let prompt: string
 
   function cancelRequest() {
-    console.log('Cancel Request')
-    placeholder = 'Enter Image Generation Prompt'
-    isProcessing = false
+    if (!isProcessing) return
+    dispatch('cancelRequest')
   } 
 
   function sendRequest() {
-    isProcessing = true
-    placeholder = 'Processing...'
+    if (prompt.trim() == '') return
+    dispatch('makeRequest', {
+      value: prompt
+    })
     prompt = ''
-    console.log('Make request')
-    setTimeout(() => {
-      isProcessing = false
-    }, 20000000)
   }
 </script>
 
